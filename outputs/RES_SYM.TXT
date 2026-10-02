@@ -1,0 +1,23 @@
+==================================================
+          HLInt - RESERVED WORDS & SYMBOLS        
+==================================================
+
+RESERVED WORDS FOUND:
+  - integer
+  - output
+
+SYMBOLS FOUND:
+  - :
+  - :=
+  - ;
+  - <<
+
+EXTRACTED IN ORDER OF OCCURRENCE:
+  Line  1 | Col  2 | [SYMBOL       ] :
+  Line  1 | Col  4 | [RESERVED WORD] integer
+  Line  1 | Col 11 | [SYMBOL       ] ;
+  Line  2 | Col  2 | [SYMBOL       ] :=
+  Line  2 | Col  6 | [SYMBOL       ] ;
+  Line  3 | Col  1 | [RESERVED WORD] output
+  Line  3 | Col  7 | [SYMBOL       ] <<
+  Line  3 | Col 10 | [SYMBOL       ] ;

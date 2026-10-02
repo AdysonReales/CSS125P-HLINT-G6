@@ -1,0 +1,38 @@
+======================================================================
+CSS125P - Principles of Programming Languages
+Project: HLInt.XXX - Simple "HL" Language Interpreter
+Group Number: Group 6
+======================================================================
+
+Group Members & Responsibilities:
+
+1. Member 1 (Lexer & Preprocessor)
+   Name: FLORES, Lleyton Andrew M.
+   Student ID: 2024100717
+   Section: AM2
+   Responsibilities:
+   - File I/O for .HL source files
+   - Whitespace removal & generation of outputs/NOSPACES.TXT
+   - Reserved words and symbol extraction & generation of outputs/RES_SYM.TXT
+   - Lexical analysis & token stream generation
+
+2. Member 2 (Syntax Analyzer & Engine)
+   Name: [Member 2 Name]
+   Student ID: [Member 2 ID]
+   Section: AM2
+   Responsibilities:
+   - Grammar parsing & syntax error checking (ERROR / NO ERROR(S) FOUND)
+   - Variable symbol table & memory management
+   - Expression evaluation (arithmetic & relational)
+   - Statement execution (output<<, assignments, if conditions)
+
+3. Member 3 (QA, Documentation & Media)
+   Name: [Member 3 Name]
+   Student ID: [Member 3 ID]
+   Section: AM2
+   Responsibilities:
+   - Test program design (PROG1.HL, PROG2.HL, PROG3.HL, error test cases)
+   - Project documentation report (CSS125P Project Template)
+   - Screenshot capture of successful & error runs
+   - Video demonstration and final submission archiving
+======================================================================
