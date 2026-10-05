@@ -238,3 +238,72 @@ def check_program(statements):
     for statement in statements:
         check_statement(statement, declared)
     return declared
+
+
+# ---------------------------------------------------------------- engine
+
+def format_value(value):
+    # doubles are shown with a precision of 2
+    if isinstance(value, float):
+        return "{:.2f}".format(value)
+    return str(value)
+
+
+def evaluate(expression, variables):
+    kind = expression[0]
+
+    if kind == "number":
+        return expression[2]
+
+    if kind == "var":
+        value = variables[expression[2]][1]
+        if value is None:
+            raise HLError("variable '" + expression[1].value + "' has no value yet", expression[1])
+        return value
+
+    left = evaluate(expression[3], variables)
+    right = evaluate(expression[4], variables)
+    if expression[2] == "+":
+        return left + right
+    return left - right
+
+
+def compare(left, operator, right):
+    if operator == "<":
+        return left < right
+    if operator == ">":
+        return left > right
+    if operator == "==":
+        return left == right
+    return left != right
+
+
+def run_statement(statement, variables, output_lines):
+    kind = statement[0]
+
+    if kind == "declare":
+        variables[statement[2]] = [statement[3], None]
+
+    elif kind == "assign":
+        variable = variables[statement[2]]
+        value = evaluate(statement[3], variables)
+        if variable[0] == DOUBLE:
+            value = round(float(value), 2)
+        variable[1] = value
+
+    elif kind == "output":
+        if isinstance(statement[2], str):
+            output_lines.append(statement[2])
+        else:
+            output_lines.append(format_value(evaluate(statement[2], variables)))
+
+    elif kind == "if":
+        left = evaluate(statement[2], variables)
+        right = evaluate(statement[4], variables)
+        if compare(left, statement[3], right):
+            run_statement(statement[5], variables, output_lines)
+
+
+def run_statement_list(statements, variables, output_lines):
+    for statement in statements:
+        run_statement(statement, variables, output_lines)
