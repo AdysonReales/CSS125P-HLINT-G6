@@ -181,3 +181,60 @@ class Parser:
             return inner
 
         raise HLError("expected a value but found " + self.describe(token), token)
+
+
+# -------------------------------------------------------- semantic check
+# works out the type of every expression, and makes sure variables are
+# declared once, before they are used
+
+def expression_type(expression, declared):
+    kind = expression[0]
+
+    if kind == "number":
+        return expression[3]
+
+    if kind == "var":
+        name = expression[2]
+        if name not in declared:
+            raise HLError("variable '" + expression[1].value + "' is not declared", expression[1])
+        return declared[name]
+
+    left_type = expression_type(expression[3], declared)
+    right_type = expression_type(expression[4], declared)
+    if left_type == DOUBLE or right_type == DOUBLE:
+        return DOUBLE
+    return INTEGER
+
+
+def check_statement(statement, declared):
+    kind = statement[0]
+
+    if kind == "declare":
+        name = statement[2]
+        if name in declared:
+            raise HLError("variable '" + statement[1].value + "' is already declared", statement[1])
+        declared[name] = statement[3]
+
+    elif kind == "assign":
+        name = statement[2]
+        if name not in declared:
+            raise HLError("variable '" + statement[1].value + "' is not declared", statement[1])
+        value_type = expression_type(statement[3], declared)
+        if declared[name] == INTEGER and value_type == DOUBLE:
+            raise HLError("cannot assign a double value to integer variable '" + statement[1].value + "'", statement[1])
+
+    elif kind == "output":
+        if not isinstance(statement[2], str):
+            expression_type(statement[2], declared)
+
+    elif kind == "if":
+        expression_type(statement[2], declared)
+        expression_type(statement[4], declared)
+        check_statement(statement[5], declared)
+
+
+def check_program(statements):
+    declared = {}
+    for statement in statements:
+        check_statement(statement, declared)
+    return declared
