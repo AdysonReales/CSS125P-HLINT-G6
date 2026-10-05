@@ -307,3 +307,38 @@ def run_statement(statement, variables, output_lines):
 def run_statement_list(statements, variables, output_lines):
     for statement in statements:
         run_statement(statement, variables, output_lines)
+
+
+# ----------------------------------------------------------- entry point
+
+def interpret(tokens):
+    """Prints ERROR or NO ERROR(S) FOUND, then the program output.
+    Returns True when there was no error."""
+    try:
+        statements = Parser(tokens).parse_program()
+        check_program(statements)
+    except HLError as error:
+        print("ERROR")
+        print("  Line " + str(error.line) + ", Col " + str(error.column) + ": " + error.message)
+        return False
+
+    print("NO ERROR(S) FOUND")
+
+    # a variable used before it has a value can only be seen while running,
+    # so the lines printed before that point are still shown
+    output_lines = []
+    try:
+        run_statement_list(statements, {}, output_lines)
+        failed = None
+    except HLError as error:
+        failed = error
+
+    for line in output_lines:
+        print(line)
+
+    if failed is not None:
+        print("RUNTIME ERROR")
+        print("  Line " + str(failed.line) + ", Col " + str(failed.column) + ": " + failed.message)
+        return False
+
+    return True
